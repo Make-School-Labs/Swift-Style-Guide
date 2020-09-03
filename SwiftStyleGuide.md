@@ -48,6 +48,27 @@ https://google.github.io/swift/
 4. [Formatting Specific Constructs](#ch4)
     - [Non-Documentation Comments](#ch4.1)
     - [Properties](#ch4.2)
+    - Variables are not created in single line
+    - Local variables that are closely related are stored as a tuple instead
+
+    Ex:
+    ```diiff
+    //⛔️⛔️⛔️
+    var quotient = 11, remainder = 1
+    - error
+    + correct
+    ! orange
+    # gray
+    ```
+    ```swift
+    //✅✅✅
+    var quotient = 11
+    var remainder = 1
+
+    //⭐️⭐️⭐️
+    let (quotient, remainder) = divide(100, 9)
+    ```
+
     - [Switch Statements](#ch4.3)
     - [Enum Cases](#ch4.4)
     - [Trailing Closures](#ch4.5)
