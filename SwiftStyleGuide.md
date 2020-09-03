@@ -26,7 +26,7 @@ https://google.github.io/swift/
     
 <a name="ch2TOC"></a>
 
-3.[ General Formatting](#ch3)
+3. [ General Formatting](#ch3)
     - [Column Limit](#ch3.1)
     - [Braces](#ch3.2)
     - [Semicolons](#ch3.3)
