@@ -11,7 +11,7 @@ https://google.github.io/swift/
     - [Whitespace Characters](#ch1.3)
     - [Special Escape Sequences](#ch1.4)
     - [Invisible Characters and Modifiers](#ch1.5)
-    - [String Literals]](#ch1.6)
+    - [String Literals](#ch1.6)
 
 
 <a name="ch2TOC"></a>
@@ -105,98 +105,235 @@ https://google.github.io/swift/
 
 ------------------------------------------------------------------------------------------------------------------------
 
-<a name="tablesWithAlignment"></a>
 
 
+<a name="ch1"></a>
 ## [1. Source File Basics](#ch1TOC)
+
+<a name="ch1.1"></a>
 ### [File Names](#ch1TOC)
+
+<a name="ch1.2"></a>
 ### [File Encoding](#ch1TOC)
+
+<a name="ch1.3"></a>
 ### [Whitespace Characters](#ch1TOC)
+
+<a name="ch1.4"></a>
 ### [Special Escape Sequences](#ch1TOC)
+
+<a name="ch1.5"></a>
 ### [Invisible Characters and Modifiers](#ch1TOC)
+
+<a name="ch1.6"></a>
 ### [String Literals](#ch1TOC)
 
 ------------------------------------------------------------------------------------------------------------------------
 
+<a name="ch2"></a>
 ## [2. Source File Structure](#ch2TOC)
+
+<a name="ch2.1"></a>
 ### [File Comments](#ch2TOC)
+
+<a name="ch2.2"></a>
 ### [Import Statements](#ch2TOC)
+
+<a name="ch2.3"></a>
 ### [Type, Variable, and Function Declarations](#ch2TOC)
+
+<a name="ch2.4"></a>
 ### [Overloaded Declarations](#ch2TOC)
+
+<a name="ch2.5"></a>
 ### [Extensions](#ch2TOC)
     
 ------------------------------------------------------------------------------------------------------------------------
 
+<a name="ch3"></a>
 ## [3. General Formatting](#ch3TOC)
+
+<a name="ch3.1"></a>
 ### [Column Limit](#ch3TOC)
+
+<a name="ch3.2"></a>
 ### [Braces](#ch3TOC)
+
+<a name="ch3.3"></a>
 ### [Semicolons](#ch3TOC)
+
+<a name="ch3.4"></a>
 ### [One Statement Per Line](#ch3TOC)
+
+<a name="ch3.5"></a>
 ### [Line-Wrapping](#ch3TOC)
+
+    <a name="ch3.5.1"></a>
     ### [Function Declarations](#ch3TOC)
+    
+    <a name="ch3.5.2"></a>
     ### [Type and Extension Declarations](#ch3TOC)
+    
+    <a name="ch3.5.3"></a>
     ### [Function Calls](#ch3TOC)
+    
+    <a name="ch3.5.4"></a>
     ### [Control Flow Statements](#ch3TOC)
+    
+    <a name="ch3.5.5"></a>
     ### [Other Expressions](#ch3TOC)
+    
+<a name="ch3.6"></a>
 ### [Horizontal Whitespace](#ch3TOC)
+
+<a name="ch3.7"></a>
 ### [Horizontal Alignment](#ch3TOC)
+
+<a name="ch3.8"></a>
 ### [Vertical Whitespace](#ch3TOC)
+
+<a name="ch3.9"></a>
 ### [Parentheses](#ch3TOC)
     
 ------------------------------------------------------------------------------------------------------------------------
 
+<a name="ch4"></a>
 ## [4. Formatting Specific Constructs](#ch4TOC)
+
+<a name="ch4.1"></a>
 ### [Non-Documentation Comments](#ch4TOC)
+
+<a name="ch4.2"></a>
 ### [Properties](#ch4TOC)
+
+<a name="ch4.3"></a>
 ### [Switch Statements](#ch4TOC)
+
+<a name="ch4.4"></a>
 ### [Enum Cases](#ch4TOC)
+
+<a name="ch4.5"></a>
 ### [Trailing Closures](#ch4TOC)
+
+<a name="ch4.6"></a>
 ### [Trailing Commas](#ch4TOC)
+
+<a name="ch4.7"></a>
 ### [Numeric Literals](#ch4TOC)
+
+<a name="ch4.8"></a>
 ### [Attributes](#ch4TOC)
     
 ------------------------------------------------------------------------------------------------------------------------
 
+<a name="ch5"></a>
 ## [5. Naming](#ch5TOC)
+
+<a name="ch5.1"></a>
 ### [Apple’s API Style Guidelines](#ch5TOC)
+
+<a name="ch5.2"></a>
 ### [Naming Conventions Are Not Access Control](#ch5TOC)
+
+<a name="ch5.3"></a>
 ### [Identifiers](#ch5TOC)
+
+<a name="ch5.4"></a>
 ### [Initializers](#ch5TOC)
+
+<a name="ch5.5"></a>
 ### [Static and Class Properties](#ch5TOC)
+
+<a name="ch5.6"></a>
 ### [Global Constants](#ch5TOC)
+
+<a name="ch5.7"></a>
 ### [Delegate Methods](#ch5TOC)
   
 ------------------------------------------------------------------------------------------------------------------------
 
+<a name="ch6"></a>
 ## [6. Programming Practices](#ch6TOC)
+
+<a name="ch6.1"></a>
 ### [Compiler Warnings](#ch6TOC)
+
+<a name="ch6.2"></a>
 ### [Initializers](#ch6TOC)
+
+<a name="ch6.3"></a>
 ### [Properties](#ch6TOC)
+
+<a name="ch6.4"></a>
 ### [Types with Shorthand Names](#ch6TOC)
+
+<a name="ch6.5"></a>
 ### [Optional Types](#ch6TOC)
+
+<a name="ch6.6"></a>
 ### [Error Types](#ch6TOC)
+
+<a name="ch6.7"></a>
 ### [Force Unwrapping and Force Casts](#ch6TOC)
+
+<a name="ch6.8"></a>
 ### [Implicitly Unwrapped Optionals](#ch6TOC)
+
+<a name="ch6.9"></a>
 ### [Access Levels](#ch6TOC)
+
+<a name="ch6.10"></a>
 ### [Nesting and Namespacing](#ch6TOC)
+
+<a name="ch6.11"></a>
 ### [guards for Early Exits](#ch6TOC)
+
+<a name="ch6.12"></a>
 ### [for-where Loops](#ch6TOC)
+
+<a name="ch6.13"></a>
 ### [fallthrough in switch Statements](#ch6TOC)
+
+<a name="ch6.14"></a>
 ### [Pattern Matching](#ch6TOC)
+
+<a name="ch6.15"></a>
 ### [Tuple Patterns](#ch6TOC)
+
+<a name="ch6.16"></a>
 ### [Numeric and String Literals](#ch6TOC)
+
+<a name="ch6.17"></a>
 ### [Playground Literals](#ch6TOC)
+
+<a name="ch6.18"></a>
 ### [Trapping vs. Overflowing Arithmetic](#ch6TOC)
+
+<a name="ch6.19"></a>
 ### [Defining New Operators](#ch6TOC)
+
+<a name="ch6.20"></a>
 ### [Overloading Existing Operators](#ch6TOC)
+
 
 ------------------------------------------------------------------------------------------------------------------------
 
+<a name="ch7"></a>
 ## [7. Documentation Comments](#ch7TOC)
+
+<a name="ch7.1"></a>
 ### [General Format](#ch7TOC)
+
+<a name="ch7.2"></a>
 ### [Single-Sentence Summary](#ch7TOC)
+
+<a name="ch7.3"></a>
 ### [Parameter, Returns, and Throws Tags](#ch7TOC)
+
+<a name="ch7.4"></a>
 ### [Apple’s Markup Format](#ch7TOC)
+
+<a name="ch7.5"></a>
 ### [Where to Document](#ch7TOC)
 
 ------------------------------------------------------------------------------------------------------------------------
