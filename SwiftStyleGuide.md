@@ -48,27 +48,6 @@ https://google.github.io/swift/
 4. [Formatting Specific Constructs](#ch4)
     - [Non-Documentation Comments](#ch4.1)
     - [Properties](#ch4.2)
-    - Variables are not created in single line
-    - Local variables that are closely related are stored as a tuple instead
-
-    Ex:
-    ```diiff
-    //⛔️⛔️⛔️
-    var quotient = 11, remainder = 1
-    - error
-    + correct
-    ! orange
-    # gray
-    ```
-    ```swift
-    //✅✅✅
-    var quotient = 11
-    var remainder = 1
-
-    //⭐️⭐️⭐️
-    let (quotient, remainder) = divide(100, 9)
-    ```
-
     - [Switch Statements](#ch4.3)
     - [Enum Cases](#ch4.4)
     - [Trailing Closures](#ch4.5)
@@ -189,20 +168,20 @@ https://google.github.io/swift/
 <a name="ch3.5"></a>
 ### [Line-Wrapping](#ch3TOC)
 
-    <a name="ch3.5.1"></a>
-    ### [Function Declarations](#ch3TOC)
-    
-    <a name="ch3.5.2"></a>
-    ### [Type and Extension Declarations](#ch3TOC)
-    
-    <a name="ch3.5.3"></a>
-    ### [Function Calls](#ch3TOC)
-    
-    <a name="ch3.5.4"></a>
-    ### [Control Flow Statements](#ch3TOC)
-    
-    <a name="ch3.5.5"></a>
-    ### [Other Expressions](#ch3TOC)
+<a name="ch3.5.1"></a>
+### [Function Declarations](#ch3TOC)
+
+<a name="ch3.5.2"></a>
+### [Type and Extension Declarations](#ch3TOC)
+
+<a name="ch3.5.3"></a>
+### [Function Calls](#ch3TOC)
+
+<a name="ch3.5.4"></a>
+### [Control Flow Statements](#ch3TOC)
+
+<a name="ch3.5.5"></a>
+### [Other Expressions](#ch3TOC)
     
 <a name="ch3.6"></a>
 ### [Horizontal Whitespace](#ch3TOC)
@@ -226,6 +205,26 @@ https://google.github.io/swift/
 
 <a name="ch4.2"></a>
 ### [Properties](#ch4TOC)
+- Variables are not created in single line
+- Local variables that are closely related are stored as a tuple instead
+
+Ex:
+```diff
+//⛔️⛔️⛔️
+var quotient = 11, remainder = 1
+- error
++ correct
+! orange
+# gray
+```
+```swift
+//✅✅✅
+var quotient = 11
+var remainder = 1
+
+//⭐️⭐️⭐️
+let (quotient, remainder) = divide(100, 9)
+```
 
 <a name="ch4.3"></a>
 ### [Switch Statements](#ch4TOC)
