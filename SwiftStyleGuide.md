@@ -213,7 +213,8 @@ Ex:
 //⛔️⛔️⛔️
 var quotient = 11, remainder = 1
 - error
-+ correct
++ correct +
+-- ee
 ! orange
 # gray
 ```
