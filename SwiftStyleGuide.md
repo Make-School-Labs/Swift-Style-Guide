@@ -1,6 +1,17 @@
 # Swift Style Guide
 https://google.github.io/swift/
 
+<!-- Author Notes:
+To color code: https://stackoverflow.com/questions/11509830/how-to-add-color-to-githubs-readme-md-file
+    ```diff
+    - text in red
+    + text in green
+    ! text in orange
+    # text in gray
+    @@ text in purple (and bold)@@
+    ```
+-->
+
 ## Table of Contents:
 
 <a name="ch1TOC"></a>
@@ -210,90 +221,20 @@ https://google.github.io/swift/
 
 Ex:
 ```diff
-//⛔️⛔️⛔️
-var quotient = 11, remainder = 1
-- error
-+ correct +
--- ee
-! orange
-# gray
+- //⛔️⛔️⛔️
+- var quotient = 11, remainder = 1
 ```
 ```swift
-//✅✅✅
-var quotient = 11
-var remainder = 1
++ //✅✅✅
++ var quotient = 11
++ var remainder = 1
 
-//⭐️⭐️⭐️
-let (quotient, remainder) = divide(100, 9)
++ //⭐️⭐️⭐️
++ let (quotient, remainder) = divide(100, 9)
 ```
 
 <a name="ch4.3"></a>
 ### [Switch Statements](#ch4TOC)
-
-- Case statements are indented at the same level as the switch statement to which they belong.
-- Only code block inside the cases are indented with the exception of `break`
-
-Ex:
-
-
-
-
-
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" 
-xmlns="http://www.w3.org/2000/svg"
-xmlns:xlink="http://www.w3.org/1999/xlink"
-width="75" height="50">
-<text font-size="16" x="10" y="20">
-<tspan fill="red">
-
-//⛔️⛔️⛔️
-
-switch order {
-
-case .ascending:
-
-    print("Ascending")
-
-case .descending:
-
-    print("Descending")
-
-case .same:
-    
-    print("Same")
-
-default: break
-
-}
-
-</tspan>!
-</text>
-</svg>
-
----
-
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="50"> 
-<text font-size="16" x="10" y="20">
- <tspan fill="red">Hello</tspan>,
-<tspan fill="green">world
-
-```swift
-+ //✅✅✅
-+ switch order {
-+ case .ascending:
-+   print("Ascending")
-+ case .descending:
-+   print("Descending")
-+ case .same:
-+   print("Same")
-+ default: break
-+ }
-```
-</tspan>!
-</text>
-</svg>
 
 <a name="ch4.4"></a>
 ### [Enum Cases](#ch4TOC)
