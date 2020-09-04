@@ -224,7 +224,7 @@ Ex:
 - //⛔️⛔️⛔️
 - var quotient = 11, remainder = 1
 ```
-```swift
+```diff
 + //✅✅✅
 + var quotient = 11
 + var remainder = 1
