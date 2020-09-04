@@ -248,14 +248,23 @@ width="75" height="50">
 <tspan fill="red">
 
 //⛔️⛔️⛔️
+
 switch order {
+
 case .ascending:
+
     print("Ascending")
+
 case .descending:
+
     print("Descending")
+
 case .same:
+    
     print("Same")
+
 default: break
+
 }
 
 </tspan>!
@@ -270,7 +279,7 @@ default: break
  <tspan fill="red">Hello</tspan>,
 <tspan fill="green">world
 
-```diff
+```swift
 + //✅✅✅
 + switch order {
 + case .ascending:
