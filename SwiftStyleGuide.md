@@ -241,53 +241,53 @@ Ex:
 
 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" 
-     xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="100" height="50"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+width="100" height="50"
 >
-  <text font-size="16" x="10" y="20">
-    <tspan fill="red">Hello</tspan>,
-    <tspan fill="green">world</tspan>!
-    
-    ```swift
-    //⛔️⛔️⛔️
-    switch order {
-      case .ascending:
-        print("Ascending")
-      case .descending:
-        print("Descending")
-      case .same:
-        print("Same")
-      default:
-        break
-    }
-    ```
-  </text>
+<text font-size="16" x="10" y="20">
+<tspan fill="red">Hello</tspan>,
+<tspan fill="green">
+
+```swift
+//⛔️⛔️⛔️
+switch order {
+case .ascending:
+print("Ascending")
+case .descending:
+print("Descending")
+case .same:
+print("Same")
+default:
+break
+}
+```
+</tspan>!
+</text>
 </svg>
 
+---
+
 <?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" 
-     xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="100" height="50"
->
-  <text font-size="16" x="10" y="20">
-    <tspan fill="red">Hello</tspan>,
-    <tspan fill="green">world</tspan>!
-    
-    ```diff
-    + //✅✅✅
-    + switch order {
-    + case .ascending:
-      + print("Ascending")
-    + case .descending:
-      + print("Descending")
-    + case .same:
-      + print("Same")
-    + default: break
-    + }
-    ```
-  </text>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="50"> 
+<text font-size="16" x="10" y="20">
+ <tspan fill="red">Hello</tspan>,
+<tspan fill="green">world
+
+```diff
++ //✅✅✅
++ switch order {
++ case .ascending:
++ print("Ascending")
++ case .descending:
++ print("Descending")
++ case .same:
++ print("Same")
++ default: break
++ }
+```
+</tspan>!
+</text>
 </svg>
 
 <a name="ch4.4"></a>
