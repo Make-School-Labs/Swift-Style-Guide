@@ -249,19 +249,18 @@ width="100" height="50"
 <tspan fill="red">Hello</tspan>,
 <tspan fill="green">
 
-```swift
+
 //⛔️⛔️⛔️
 switch order {
 case .ascending:
-print("Ascending")
+    print("Ascending")
 case .descending:
-print("Descending")
+    print("Descending")
 case .same:
-print("Same")
-default:
-break
+    print("Same")
+default: break
 }
-```
+
 </tspan>!
 </text>
 </svg>
@@ -278,11 +277,11 @@ break
 + //✅✅✅
 + switch order {
 + case .ascending:
-+ print("Ascending")
++   print("Ascending")
 + case .descending:
-+ print("Descending")
++   print("Descending")
 + case .same:
-+ print("Same")
++   print("Same")
 + default: break
 + }
 ```
