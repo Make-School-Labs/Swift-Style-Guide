@@ -235,22 +235,258 @@ Ex:
 
 <a name="ch4.3"></a>
 ### [Switch Statements](#ch4TOC)
+- Case statements are indented at the same level as the switch statement to which they belong.
+- Only code block inside the cases are indented with the exception of `break`
+
+Ex:
+```diff
+- //⛔️⛔️⛔️
+- switch order {
+-   case .ascending:
+-     print("Ascending")
+-   case .descending:
+-     print("Descending")
+-   case .same:
+-     print("Same")
+-   default:
+-     break
+- }
+```
+
+```swift
++ //✅✅✅
++ switch order {
++ case .ascending:
++   print("Ascending")
++ case .descending:
++   print("Descending")
++ case .same:
++   print("Same")
++ default: break
++ }
+```
+
 
 <a name="ch4.4"></a>
 ### [Enum Cases](#ch4TOC)
+- In general, there is only one case per line in an enum. Only separate cases with a comma when enum is simple and when none of the cases have asociated values or raw values
+
+```diff
++ //✅✅✅
++ public enum Token { //enum without associated or raw values
++   case comma, semicolon, identifier
++ }
+
++ public enum Token {
++   case comma
++   case semicolon
++   case identifier(String) //associated value
+```
+```diff
+- //⛔️⛔️⛔️
+- public enum Token {
+-   case comma, semicolon, identifier(String)
+- }
+```
+
+- When all cases of an enum are `indirect`, the enum itself is declared `indirect` and the indirect keyword is removed from all the cases.
+
+```diff
++ //✅✅✅
++ public indirect enum DependencyGraphNode {
++   case userDefined(dependencies: [DependencyGraphNode])
++   case synthesized(dependencies: [DependencyGraphNode])
++ }
+```
+```diff
+- //⛔️⛔️⛔️
+- public enum DependencyGraphNode {
+-   indirect case userDefined(dependencies: [DependencyGraphNode])
+-   indirect case synthesized(dependencies: [DependencyGraphNode])
+- }
+```
+
+- When an `enum` case does not have associated values, empty parentheses are never present
+
+```diff
+- //⛔️⛔️⛔️
+- public enum BinaryTree<Element> {
+-   indirect case node(element: Element, left: BinaryTree, right: BinaryTree)
+-   case empty()  // AVOID.
+- }
+```
+```diff
++ //✅✅✅
++ public enum BinaryTree<Element> {
++   indirect case node(element: Element, left: BinaryTree, right: BinaryTree)
++   case empty  // GOOD.
++ }
+```
+
+
+- The cases of an enum must follow a logical ordering that the author could explain.
+
+```diff
+- //⛔️⛔️⛔️
+- public enum HTTPStatus: Int {
+-   case badRequest = 400
+-   case forbidden = 403
+-   case internalServerError = 500
+-   case notAuthorized = 401
+-   case notFound = 404
+-   case ok = 200
+-   case paymentRequired = 402
+- }
+```
+```diff
++ //✅✅✅
++ //Cases are arranged in numerical order and blank lines are used to separate groups
++ public enum HTTPStatus: Int {
++   case ok = 200
++ 
++   case badRequest = 400
++   case notAuthorized = 401
++   case paymentRequired = 402
++   case forbidden = 403
++   case notFound = 404
++ 
++   case internalServerError = 500
++ }
+```
 
 <a name="ch4.5"></a>
 ### [Trailing Closures](#ch4TOC)
+- Functions should not be overloaded that they differ only by the name of their trailing closure argument.
 
+```diff
+- //⛔️⛔️⛔️
+- //This prohibits using trailing closure syntax to call greet
+- func greet(enthusiastically nameProvider: () -> String) {
+-   print("Hello, \(nameProvider())! It's a pleasure to see you!")
+- }
+- 
+- func greet(apathetically nameProvider: () -> String) {
+-   print("Oh, look. It's \(nameProvider()).")
+- }
+- 
+- greet { "John" }  // error: ambiguous use of 'greet'
+```
+```diff
++ //✅✅✅
++ func greetEnthusiastically(_ nameProvider: () -> String) {
++   print("Hello, \(nameProvider())! It's a pleasure to see you!")
++ }
++ 
++ func greetApathetically(_ nameProvider: () -> String) {
++   print("Oh, look. It's \(nameProvider()).")
++ }
++ 
++ greetEnthusiastically { "John" }
++ greetApathetically { "not John" }
+```
+
+- If a function call has multiple closure arguments, then *none* are called using trailing closure syntax, instead *all* are labeled and nested inside the argument list’s parentheses.
+```diff
+- //⛔️⛔️⛔️
+- UIView.animate(
+-   withDuration: 0.5,
+-   animations: {
+-     // ...
+-   }) { finished in
+-     // ...
+-   }
+```
+```diff
++ //✅✅✅
++ UIView.animate(
++   withDuration: 0.5,
++   animations: {
++     // ...
++   },
++   completion: { finished in //labeled closure arguments
++     // ...
++   })
+```
+
+- When a function called with trailing closure syntax takes no other arguments, empty parentheses (()) after the function name are never present.
+
+```diff
++ //✅✅✅
++ let squares = [1, 2, 3].map { $0 * $0 }
+```
+
+```diff
+- //⛔️⛔️⛔️
+- let squares = [1, 2, 3].map({ $0 * $0 })
+- let squares = [1, 2, 3].map() { $0 * $0 }
+```
+
+-----
 <a name="ch4.6"></a>
 ### [Trailing Commas](#ch4TOC)
+- Trailing commas in **array** and **dictionary literals** are required when each element is placed on its own line.
+
+```diff
++ //✅✅✅
++ let configurationKeys = [
++   "bufferSize",
++   "compression",
++   "encoding",                                    // GOOD.
++ ]
+```
+```diff
+- //⛔️⛔️⛔️
+- let configurationKeys = [
+-   "bufferSize",
+-   "compression",
+-   "encoding"                                     // AVOID.
+- ]
+```
+
 
 <a name="ch4.7"></a>
 ### [Numeric Literals](#ch4TOC)
+- For readability, It is recommended but not required that long numeric literals (decimal, hexadecimal, octal, and binary) use the underscore (_) separator to group digits
+- 3 digits for decimals, 4 digits for hexadecimal, 4 or 8 digits for binary literals
+
+```diff
+- //⛔️⛔️⛔️
+- var bigInt = 50020099000
+- var smallDouble = 0.2340911002
+- var bigHex = "7BFC6FEA9"
+```
+```diff
++ //✅✅✅
++ var bigInt = 50_020_099_000
++ var smallDouble = 0.234_091_100_2
++ var bigHex = "7_BFC6_FEA9"
+```
 
 <a name="ch4.8"></a>
 ### [Attributes](#ch4TOC)
-    
+- Parameterized attributes (such as @availability(...) or @objc(...)) are each written on their own line before the declaration to which they apply, are ordered, and are indented at the same level.
+```diff
+//⛔️⛔️⛔️
+- @available(iOS 9.0, *) public func coolNewFeature() {
+-   // ...
+- }
+```
+```diff
++ //✅✅✅
++ @available(iOS 9.0, *)
++ public func coolNewFeature() {
++   // ...
++ }
+```
+
+- Attributes without parameters (for example, @objc without arguments, `@IBOutlet`, or `@NSManaged`) may be placed on the same line
+```diff
++ //✅✅✅
++ public class MyViewController: UIViewController {
++   @IBOutlet private var tableView: UITableView!
++ }
+```
+
 ------------------------------------------------------------------------------------------------------------------------
 
 <a name="ch5"></a>
