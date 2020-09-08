@@ -410,15 +410,15 @@ Ex:
 
 - When a function called with trailing closure syntax takes no other arguments, empty parentheses (()) after the function name are never present.
 
-```diff
-+ //✅✅✅
-+ let squares = [1, 2, 3].map { $0 * $0 }
+```swift
+//✅✅✅
+let squares = [1, 2, 3].map { $0 * $0 }
 ```
 
-```diff
-- //⛔️⛔️⛔️
-- let squares = [1, 2, 3].map({ $0 * $0 })
-- let squares = [1, 2, 3].map() { $0 * $0 }
+```swift
+//⛔️⛔️⛔️
+let squares = [1, 2, 3].map({ $0 * $0 })
+let squares = [1, 2, 3].map() { $0 * $0 }
 ```
 
 
