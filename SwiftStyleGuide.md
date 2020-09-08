@@ -253,7 +253,7 @@ Ex:
 - }
 ```
 
-```swift
+```diff
 + //✅✅✅
 + switch order {
 + case .ascending:
@@ -421,7 +421,7 @@ Ex:
 - let squares = [1, 2, 3].map() { $0 * $0 }
 ```
 
------
+
 <a name="ch4.6"></a>
 ### [Trailing Commas](#ch4TOC)
 - Trailing commas in **array** and **dictionary literals** are required when each element is placed on its own line.
@@ -466,7 +466,7 @@ Ex:
 ### [Attributes](#ch4TOC)
 - Parameterized attributes (such as @availability(...) or @objc(...)) are each written on their own line before the declaration to which they apply, are ordered, and are indented at the same level.
 ```diff
-//⛔️⛔️⛔️
+- //⛔️⛔️⛔️
 - @available(iOS 9.0, *) public func coolNewFeature() {
 -   // ...
 - }
