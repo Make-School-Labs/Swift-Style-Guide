@@ -484,26 +484,182 @@ public class MyViewController: UIViewController {
 <a name="ch5.1"></a>
 ### [Apple’s API Style Guidelines](#ch5TOC)
 
+
 <a name="ch5.2"></a>
 ### [Naming Conventions Are Not Access Control](#ch5TOC)
+- Do not put access control (`open`, `internal`, `fileprivate`, `private`) on model or variable names
+- Open access is the highest (least restrictive) access level and private access is the lowest (most restrictive) access level.
+```swift
+//⛔️⛔️⛔️
+struct PrivateProfile {
+    var secretId: String
+    ...
+}
+```
 
-
+```swift
+//✅✅✅
+private struct HiddenProfile {
+    var secretId: String
+    ...
+}
+```
 
 <a name="ch5.3"></a>
 ### [Identifiers](#ch5TOC)
+- Identifiers should only contain [7-bit ASCII characters](https://www.sciencebuddies.org/science-fair-projects/references/ascii-table). 
+- Unicode identifiers are allowed if they have a clear and legitimate meaning 
+    - e.g. Greek letters that represent mathematical concepts
+```swift
+//✅✅✅
+let smile = "😊"
+let deltaX = newX - previousX
+let Δx = newX - previousX
+```
+
+```swift
+//⛔️⛔️⛔️
+let 😊 = "😊"
+```
 
 <a name="ch5.4"></a>
 ### [Initializers](#ch5TOC)
+- Initializer arguments that correspond directly to a stored property have the same name as the property
+
+```swift
+//⛔️⛔️⛔️
+public struct Person {
+  public let name: String
+  public let phoneNumber: String
+
+  // AVOID.
+  public init(name otherName: String, phoneNumber otherPhoneNumber: String) {
+    name = otherName
+    phoneNumber = otherPhoneNumber
+  }
+}
+```
+```swift
+//✅✅✅
+public struct Person {
+  public let name: String
+  public let phoneNumber: String
+
+  // GOOD.
+  public init(name: String, phoneNumber: String) {
+    self.name = name
+    self.phoneNumber = phoneNumber
+  }
+}
+```
 
 <a name="ch5.5"></a>
 ### [Static and Class Properties](#ch5TOC)
+- Static and class properties that return instances of the declaring type are *not suffixed* with the name of the type.
+```swift
+//⛔️⛔️⛔️
+public class UIColor {
+  public class var redColor: UIColor {           // AVOID.
+    // ...
+  }
+}
+
+public class URLSession {
+  public class var sharedSession: URLSession {   // AVOID.
+    // ...
+  }
+}
+
+```
+```swift
+//✅✅✅
+public class UIColor {
+  public class var red: UIColor {                // GOOD.
+    // ...
+  }
+}
+
+public class URLSession {
+  public class var shared: URLSession {          // GOOD.
+    // ...
+  }
+}
+```
 
 <a name="ch5.6"></a>
 ### [Global Constants](#ch5TOC)
+- Like other variables, global constants are **lowerCamelCase**
+```swift
+//⛔️⛔️⛔️
+let SecondsPerMinute = 60
+let kSecondsPerMinute = 60
+let gSecondsPerMinute = 60
+let SECONDS_PER_MINUTE = 60
+```
+
+```swift
+//✅✅✅
+let secondsPerMinute = 60
+```
 
 <a name="ch5.7"></a>
 ### [Delegate Methods](#ch5TOC)
-  
+- All methods take the delegate’s source object as the first argument
+
+##### For methods that take the delegate’s source object as their only argument:
+- If method **returns Void**
+    - base name is **delegate’s source type** followed by an **indicative verb phrase** describing the event
+    - argument is **unlabeled**
+    ```swift
+    func scrollViewDidBeginScrolling(_ scrollView: UIScrollView) //✅✅✅
+    ```
+- If the method **returns Bool** (such as those that make an assertion about the delegate’s source object itself), then the method’s 
+    - name is the **delegate’s source type** followed by an **indicative or conditional verb phrase** describing the assertion
+    - argument is **unlabeled**.
+    ```swift
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool //✅✅✅
+    ```
+- If the method returns some other value 
+    - base name is a **noun phrase** describing the property being queried. 
+    - argument is **labeled with a preposition or phrase with a trailing preposition** that combines the noun phrase and the delegate’s source object
+    ```swift
+    func numberOfSections(in scrollView: UIScrollView) -> Int //✅✅✅
+    ```
+##### For methods that take additional arguments after the delegate’s source object, the method’s base name is the delegate’s source type by itself and the **first argument is unlabeled**. Then:
+- If the method **returns Void**, 
+    - the second argument is **labeled with an indicative verb phrase** describing the event that has the argument as its **direct object or prepositional object**
+    ```swift
+    //✅✅✅
+    func tableView(
+    _ tableView: UITableView,
+    willDisplayCell cell: UITableViewCell,
+    forRowAt indexPath: IndexPath)
+    ```
+- If the method **returns Bool**, 
+    - the second argument is **labeled with an indicative or conditional verb phrase** that describes the return value in terms of the argument
+
+    ```swift
+    //✅✅✅
+    func tableView(
+      _ tableView: UITableView,
+      shouldSpringLoadRowAt indexPath: IndexPath,
+      with context: UISpringLoadedInteractionContext
+    ) -> Bool
+    ```
+- If the method **returns some other value**, 
+    - the second argument is **labeled with a noun phrase and trailing preposition** that describes the return value in terms of the argument
+    ```swift
+    //✅✅✅
+    func tableView(
+      _ tableView: UITableView,
+      heightForRowAt indexPath: IndexPath
+    ) -> CGFloat
+    ```
+
+Apple’s documentation on [delegates and data sources](https://developer.apple.com/library/content/documentation/General/Conceptual/CocoaEncyclopedia/DelegatesandDataSources/DelegatesandDataSources.html) also contains some good general guidance about such names.
+
+
+
 ------------------------------------------------------------------------------------------------------------------------
 
 <a name="ch6"></a>
@@ -511,9 +667,29 @@ public class MyViewController: UIViewController {
 
 <a name="ch6.1"></a>
 ### [Compiler Warnings](#ch6TOC)
+  
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
 
 <a name="ch6.2"></a>
 ### [Initializers](#ch6TOC)
+  
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
 
 <a name="ch6.3"></a>
 ### [Properties](#ch6TOC)
