@@ -72,7 +72,6 @@ https://google.github.io/swift/
 
 6. [Programming Practices](#ch6)
     - [Compiler Warnings](#ch6.1)
-    - [Initializers](#ch6.2)
     - [Properties](#ch6.3)
     - [Types with Shorthand Names](#ch6.4)
     - [Optional Types](#ch6.5)
@@ -664,106 +663,594 @@ Apple’s documentation on [delegates and data sources](https://developer.apple.
 
 <a name="ch6"></a>
 ## [6. Programming Practices](#ch6TOC)
+This section is about rules to avoid: 
+- avoid redundancy
+- avoid ambiguity
+- implicitness over explicitness unless being explicit improves readability and/or reduces ambiguity.
+
 
 <a name="ch6.1"></a>
 ### [Compiler Warnings](#ch6TOC)
-  
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
-```
-
-<a name="ch6.2"></a>
-### [Initializers](#ch6TOC)
-  
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
-```
+- Code should compile without warnings unless these warnings are hard for the author to remove
+- A reasonable exception is deprecation warnings
 
 <a name="ch6.3"></a>
 ### [Properties](#ch6TOC)
+- The `get` block for a read-only computed property is omitted
+
+```swift
+//⛔️⛔️⛔️
+var totalCost: Int {
+  get {
+    return items.sum { $0.cost }
+  }
+}
+```
+
+```swift
+//✅✅✅
+var totalCost: Int {
+  return items.sum { $0.cost }
+}
+```
 
 <a name="ch6.4"></a>
 ### [Types with Shorthand Names](#ch6TOC)
+- Arrays, dictionaries, and optional types are written in their shorthand form whenever possible
+```swift
+//⛔️⛔️⛔️
+func enumeratedDictionary<Element>(
+  from values: Array<Element>,
+  start: Optional<Array<Element>.Index> = nil
+) -> Dictionary<Int, Element> {
+  // ...
+}
+```
+
+```swift
+//✅✅✅
+func enumeratedDictionary<Element>(
+  from values: [Element],
+  start: Array<Element>.Index? = nil
+) -> [Int: Element] {
+  // ...
+}
+```
+
+- `Void` is a `typealias` for the empty tuple (), so from an implementation point of view they are equivalent
+- `Void` return type is omitted entirely on functions with the `func` keyword
+```swift
+//⛔️⛔️⛔️
+func doSomething() -> Void {
+  // ...
+}
+
+func doSomething2() -> () {
+  // ...
+}
+
+let callback: () -> ()
+```
+
+```swift
+//✅✅✅
+func doSomething() {
+  // ...
+}
+
+let callback: () -> Void
+```
 
 <a name="ch6.5"></a>
 ### [Optional Types](#ch6TOC)
+- Optional is used to convey a non-error result that is either a value or the absence of a value
+    - e.g. searching a collection for a value and not finding the value is **valid and expect outcome**, not an error 
+```swift
+//⛔️⛔️⛔️
+func index(of thing: Thing, in things: [Thing]) -> Int { //should not return -1 if no index like in Python
+  // ...
+}
+
+let index = index(of: thing, in: lotsOfThings)
+if index != -1 {
+  // Found it.
+} else {
+  // Didn't find it.
+}
+```
+
+```swift
+//✅✅✅
+func index(of thing: Thing, in things: [Thing]) -> Int? { //should return nil index instead of -1
+  // ...
+}
+
+if let index = index(of: thing, in: lotsOfThings) {
+  // Found it.
+} else {
+  // Didn't find it.
+}
+```
+- Conditional statements that test that an Optional is non-nil but do not access the wrapped value are written as comparisons to nil
+
+```swift
+//⛔️⛔️⛔️
+if let _ = value {
+  print("value was not nil")
+}
+```
+```swift
+//✅✅✅
+if value != nil {
+  print("value was not nil")
+}
+```
 
 <a name="ch6.6"></a>
 ### [Error Types](#ch6TOC)
+- Error types are used when there are multiple possible error states
+- Throwing errors instead of merging them with the return type cleanly separates concerns
+- Invalid inputs and invalid state are treated as errors and are handled using **do-catch** and **try**
+```swift
+//✅✅✅
+struct Document {
+  enum ReadError: Error {
+    case notFound
+    case permissionDenied
+    case malformedHeader
+  }
+
+  init(path: String) throws {
+    // ...
+  }
+}
+
+do {
+  let document = try Document(path: "important.data")
+} catch Document.ReadError.notFound {
+  // ...
+} catch Document.ReadError.permissionDenied {
+  // ...
+} catch {
+  // ...
+}
+```
+- In general, force-try! is forbidden because it is equivalent to try followed by fatalError **without a meaningful message**
+    - **exceptiion** unit tests and test-only code
+```swift
+let regex = try! NSRegularExpression(pattern: "a*b+c?")
+```
 
 <a name="ch6.7"></a>
 ### [Force Unwrapping and Force Casts](#ch6TOC)
+- Force-unwrapping and force-casting are often code smells and are strongly discouraged
+- **Exception:** 
+    - clear comment that describes to other programmers that the operation is safe
+    - unit tests and test-only code does not need additional documentation
+```swift
+//✅✅✅
+let value = getSomeInteger()
+
+// ...intervening code...
+
+// This force-unwrap is safe because `value` is guaranteed to fall within the
+// valid enum cases because it came from some data source that only permits
+// those raw values.
+return SomeEnum(rawValue: value)!
+```
+
 
 <a name="ch6.8"></a>
 ### [Implicitly Unwrapped Optionals](#ch6TOC)
+- Implicitly unwrapped optionals are unsafe and should be avoided in favor of non-optional declarations or regular `Optional` types
+- **Exceptions**
+    - User-interface objects whose lifetimes are based on the UI lifecycle like `@IBOutlet` properties connected to XIB file or storyboard
+    - properties that are initialized externally like in the `prepareForSegue`
+    - properties that are initialized elsewhere during a class’s life cycle, like views in a view controller’s `viewDidLoad` method
+    - unit tests which must initialized in the `setup()` method
+```swift
+//✅✅✅
+class SomeViewController: UIViewController {
+  @IBOutlet var button: UIButton!
+
+  override func viewDidLoad() {
+    populateLabel(for: button)
+  }
+
+  private func populateLabel(for button: UIButton) {
+    // ...
+  }
+}
+```
 
 <a name="ch6.9"></a>
 ### [Access Levels](#ch6TOC)
+- Specifying an explicit access level at the file level on an extension is forbidden 
+- Each member of the extension should have its access level specified if it is different than the default
+
+```swift
+//⛔️⛔️⛔️
+public extension String {
+  var isUppercase: Bool {
+    // ...
+  }
+
+  var isLowercase: Bool {
+    // ...
+  }
+}
+```
+
+```swift
+//✅✅✅
+extension String {
+  public var isUppercase: Bool {
+    // ...
+  }
+
+  public var isLowercase: Bool {
+    // ...
+  }
+}
+```
 
 <a name="ch6.10"></a>
 ### [Nesting and Namespacing](#ch6TOC)
+- Swift allows and prefers enums, structs, and classes to be nested to show scope and relationships among types 
+```swift
+//⛔️⛔️⛔️
+class Parser {
+  func parse(text: String) throws {
+    // ...
+  }
+}
+
+enum ParseError: Error {
+  case invalidToken(String)
+  case unexpectedEOF
+}
+```
+
+```swift
+//✅✅✅
+class Parser {
+  enum Error: Swift.Error {
+    case invalidToken(String)
+    case unexpectedEOF
+  }
+
+  func parse(text: String) throws {
+    // ...
+  }
+}
+```
+
+- Swift does not currently allow protocols to be nested in other types or vice versa
+- Declaring an enum without cases is **the canonical way to define a “namespace”** to group a set of related declarations, such as constants or helper functions
+
+```swift
+//⛔️⛔️⛔️
+struct Dimensions {
+  private init() {}
+
+  static let tileMargin: CGFloat = 8
+  static let tilePadding: CGFloat = 4
+  static let tileContentSize: CGSize(width: 80, height: 64)
+}
+```
+
+```swift
+//✅✅✅
+enum Dimensions {
+  static let tileMargin: CGFloat = 8
+  static let tilePadding: CGFloat = 4
+  static let tileContentSize: CGSize(width: 80, height: 64)
+}
+```
+
 
 <a name="ch6.11"></a>
 ### [guards for Early Exits](#ch6TOC)
+- A `guard` statement provides visual emphasis that the condition being tested is a special case that causes early exit from the enclosing scope
+- `guard` statements improve readability by eliminating extra levels of nesting
+```swift
+//⛔️⛔️⛔️
+func discombobulate(_ values: [Int]) throws -> Int {
+  if let first = values.first {
+    if first >= 0 {
+      var result = 0
+      for value in values {
+        result += invertedCombobulatoryFactor(of: value)
+      }
+      return result
+    } else {
+      throw DiscombobulationError.negativeEnergy
+    }
+  } else {
+    throw DiscombobulationError.arrayWasEmpty
+  }
+}
+```
+
+```swift
+//✅✅✅
+func discombobulate(_ values: [Int]) throws -> Int {
+  guard let first = values.first else {
+    throw DiscombobulationError.arrayWasEmpty
+  }
+  guard first >= 0 else {
+    throw DiscombobulationError.negativeEnergy
+  }
+
+  var result = 0
+  for value in values {
+    result += invertedCombobulatoryFactory(of: value)
+  }
+  return result
+}
+```
+
 
 <a name="ch6.12"></a>
 ### [for-where Loops](#ch6TOC)
+- If the entirety of a for loop’s body would be a single if block testing a condition of the element, the test is placed in the where clause of the for statement instead
+```swift
+//⛔️⛔️⛔️
+for item in collection {
+  if item.hasProperty {
+    // ...
+  }
+}
+```
+```swift
+//✅✅✅
+for item in collection where item.hasProperty {
+  // ...
+}
+```
 
 <a name="ch6.13"></a>
 ### [fallthrough in switch Statements](#ch6TOC)
+- Multiple cases of a switch that execute the same statements should be combined into ranges or comma-delimited lists. 
+- Multiple case statements that do nothing but fallthrough to a case below are not allowed
+    - there is never a case whose body contains only the fallthrough statement
+```swift
+//⛔️⛔️⛔️
+switch value {
+case 1: print("one")
+case 2: fallthrough
+case 3: fallthrough
+case 4: print("two to four")
+case 5: fallthrough
+case 7: print("five or seven")
+default: break
+}
+```
+
+```swift
+//✅✅✅
+switch value {
+case 1: print("one")
+case 2...4: print("two to four")
+case 5, 7: print("five or seven")
+default: break
+}
+```
+
 
 <a name="ch6.14"></a>
 ### [Pattern Matching](#ch6TOC)
+- The let and var keywords are placed individually in front of each element in a pattern that is being matched
+
+```swift
+//✅✅✅
+enum DataPoint {
+  case unlabeled(Int)
+  case labeled(String, Int)
+}
+
+let label = "goodbye"
+
+// `label` is treated as a value here because it is not preceded by `let`, so
+// the pattern below matches only data points that have the label "goodbye".
+switch DataPoint.labeled("hello", 100) {
+case .labeled(label, let value):
+  // ...
+}
+
+// Writing `let` before each individual binding clarifies that the intent is to
+// introduce a new binding (shadowing the local variable within the case) rather
+// than to match against the value of the local variable. Thus, this pattern
+// matches data points with any string label.
+switch DataPoint.labeled("hello", 100) {
+case .labeled(let label, let value):
+  // ...
+}
+```
+- The first switch example above, the author is comparing "hello" with "goodbye" while the second switch statement is creating an instance of the "hello"
+
+##### Pattern matching with Tuples
+- Labels of tuple arguments and enum associated values are omitted when binding a value to a variable with the same name as the label.
+- Including the labels adds noise that is redundant and lacking useful information
+```swift
+//⛔️⛔️⛔️
+switch treeNode {
+case .subtree(left: let left, right: let right):
+  // ...
+case .leaf(element: let element):
+  // ...
+}
+```
+
+```swift
+//✅✅✅
+enum BinaryTree<Element> {
+  indirect case subtree(left: BinaryTree<Element>, right: BinaryTree<Element>)
+  case leaf(element: Element)
+}
+
+switch treeNode {
+case .subtree(let left, let right):
+  // ...
+case .leaf(let element):
+  // ...
+}
+```
+
 
 <a name="ch6.15"></a>
 ### [Tuple Patterns](#ch6TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch6.16"></a>
 ### [Numeric and String Literals](#ch6TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch6.17"></a>
 ### [Playground Literals](#ch6TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch6.18"></a>
 ### [Trapping vs. Overflowing Arithmetic](#ch6TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
 
 <a name="ch6.19"></a>
 ### [Defining New Operators](#ch6TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
 
 <a name="ch6.20"></a>
 ### [Overloading Existing Operators](#ch6TOC)
+```swift
+//⛔️⛔️⛔️
 
+```
+
+```swift
+//✅✅✅
+
+```
 
 ------------------------------------------------------------------------------------------------------------------------
 
 <a name="ch7"></a>
 ## [7. Documentation Comments](#ch7TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch7.1"></a>
 ### [General Format](#ch7TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch7.2"></a>
 ### [Single-Sentence Summary](#ch7TOC)
 
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
+
 <a name="ch7.3"></a>
 ### [Parameter, Returns, and Throws Tags](#ch7TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch7.4"></a>
 ### [Apple’s Markup Format](#ch7TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
+
 
 <a name="ch7.5"></a>
 ### [Where to Document](#ch7TOC)
+```swift
+//⛔️⛔️⛔️
+
+```
+
+```swift
+//✅✅✅
+
+```
 
 ------------------------------------------------------------------------------------------------------------------------
