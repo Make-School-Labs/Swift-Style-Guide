@@ -87,9 +87,6 @@ https://google.github.io/swift/
     - [Tuple Patterns](#ch6.15)
     - [Numeric and String Literals](#ch6.16)
     - [Playground Literals](#ch6.17)
-    - [Trapping vs. Overflowing Arithmetic](#ch6.18)
-    - [Defining New Operators](#ch6.19)
-    - [Overloading Existing Operators](#ch6.20)
     
     
 <a name="ch7TOC"></a>
@@ -1100,157 +1097,248 @@ case .leaf(let element):
 
 <a name="ch6.15"></a>
 ### [Tuple Patterns](#ch6TOC)
+- Assigning variables through a tuple pattern is only permitted if the left-hand side of the assignment is unlabeled.
 ```swift
 //⛔️⛔️⛔️
-
+let (x: a, y: b) = (y: 4, x: 5.0)
 ```
-
 ```swift
 //✅✅✅
-
+let (a, b) = (y: 4, x: 5.0)
 ```
-
+- Labels on the left-hand side should resemble type annotations
+```swift
+//⛔️⛔️⛔️
+let (x: Int, y: Double) = (y: 4, x: 5.0)
+```
 
 <a name="ch6.16"></a>
 ### [Numeric and String Literals](#ch6TOC)
+- Integer and string literals in Swift do not have an intrinsic type
 ```swift
 //⛔️⛔️⛔️
+// This first tries to create an `Int` (signed) from the literal and then
+// convert it to a `UInt64`. Even though this literal fits into a `UInt64`, it
+// doesn't fit into an `Int` first, so it doesn't compile.
+let a1 = UInt64(0x8000_0000_0000_0000)
 
+// This invokes `Character.init(_: String)`, thus creating a `String` "a" at
+// runtime (which involves a slow heap allocation), extracting the character
+// from it, and then releasing it. This is significantly slower than a proper
+// coercion.
+let b = Character("a")
+
+// As above, this creates a `String` and then `Character.init(_: String)`
+// attempts to extract the single character from it. This fails a precondition
+// check and traps at runtime.
+let c = Character("ab")
 ```
 
 ```swift
 //✅✅✅
+// Without a more explicit type, x1 will be inferred as type Int.
+let x1 = 50
 
+// These are explicitly type Int32.
+let x2: Int32 = 50
+let x3 = 50 as Int32
+
+// Without a more explicit type, y1 will be inferred as type String.
+let y1 = "a"
+
+// These are explicitly type Character.
+let y2: Character = "a"
+let y3 = "a" as Character
+
+// These are explicitly type UnicodeScalar.
+let y4: UnicodeScalar = "a"
+let y5 = "a" as UnicodeScalar
+
+func writeByte(_ byte: UInt8) {
+  // ...
+}
+// Inference also occurs for function arguments, so 50 is a UInt8 without
+// explicitly coercion.
+writeByte(50)
 ```
 
 
 <a name="ch6.17"></a>
 ### [Playground Literals](#ch6TOC)
+- The graphically-rendered playground literals `#colorLiteral(...)`, `#imageLiteral(...)`, and `#fileLiteral(...)` are forbidden in non-playground production code
 ```swift
 //⛔️⛔️⛔️
-
+let color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 ```
-
 ```swift
 //✅✅✅
-
-```
-
-
-<a name="ch6.18"></a>
-### [Trapping vs. Overflowing Arithmetic](#ch6TOC)
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
-```
-
-<a name="ch6.19"></a>
-### [Defining New Operators](#ch6TOC)
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
-```
-
-<a name="ch6.20"></a>
-### [Overloading Existing Operators](#ch6TOC)
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
+let color = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
 
 <a name="ch7"></a>
 ## [7. Documentation Comments](#ch7TOC)
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
-```
-
 
 <a name="ch7.1"></a>
 ### [General Format](#ch7TOC)
+- Documentation comments are written with a triple slash (///) at the beginning of the line, not Javadoc-style block comments (/** ... */)
 ```swift
 //⛔️⛔️⛔️
-
+/**
+ * Returns the numeric value of the given digit represented as a Unicode scalar.
+ *
+ * - Parameters:
+ *   - digit: The Unicode scalar whose numeric value should be returned.
+ *   - radix: The radix, between 2 and 36, used to compute the numeric value.
+ * - Returns: The numeric value of the scalar.
+ */
+func numericValue(of digit: UnicodeScalar, radix: Int = 10) -> Int {
+  // ...
+}
 ```
 
 ```swift
 //✅✅✅
-
+/// Returns the numeric value of the given digit represented as a Unicode scalar.
+///
+/// - Parameters:
+///   - digit: The Unicode scalar whose numeric value should be returned.
+///   - radix: The radix, between 2 and 36, used to compute the numeric value.
+/// - Returns: The numeric value of the scalar.
+func numericValue(of digit: UnicodeScalar, radix: Int = 10) -> Int {
+  // ...
+}
 ```
 
 
 <a name="ch7.2"></a>
 ### [Single-Sentence Summary](#ch7TOC)
-
+- Documentation comments begin with a brief **single-sentence** summary that describes the declaration.
+- May not be too many lines
+- Does not need to be a complete sentence
 ```swift
 //⛔️⛔️⛔️
+/// This property is the background color of the view.
+var backgroundColor: UIColor
 
+/// This method returns the sum of the numbers in the given array.
+///
+/// - Parameter numbers: The numbers to sum.
+/// - Returns: The sum of the numbers.
+func sum(_ numbers: [Int]) -> Int {
+  // ...
+}
 ```
 
 ```swift
 //✅✅✅
+/// The background color of the view.
+var backgroundColor: UIColor
 
+/// Returns the sum of the numbers in the given array.
+///
+/// - Parameter numbers: The numbers to sum.
+/// - Returns: The sum of the numbers.
+func sum(_ numbers: [Int]) -> Int {
+  // ...
+}
 ```
 
 
 <a name="ch7.3"></a>
 ### [Parameter, Returns, and Throws Tags](#ch7TOC)
+- Clearly document the parameters, return value, and thrown errors of functions using the `Parameter(s)`, `Returns`, and `Throws` tags, in that order
+- None should have an empty description. 
+- When a description does not fit on a single line, continuation lines are indented 2 spaces in from the position of the hyphen starting the tag.
+- Recommended way to write a documentation comments in Xcode is to place cursor on the declaration and press **Command + Option + /** to automatically generate the correct format with placeholders to be filled in ⭐️⭐️⭐️
 ```swift
 //⛔️⛔️⛔️
+/// Returns the output generated by executing a command.
+///
+/// - Parameters:
+///   - command: The command to execute in the shell environment. 🚫🚫🚫
+/// - Returns: A string containing the contents of the invoked process's
+///   standard output.
+func execute(command: String) -> String {
+  // ...
+}
 
+/// Returns the output generated by executing a command with the given string
+/// used as standard input.
+///
+/// - Parameter command: The command to execute in the shell environment. 🚫🚫🚫
+/// - Parameter stdin: The string to use as standard input. 🚫🚫🚫
+/// - Returns: A string containing the contents of the invoked process's
+///   standard output.
+func execute(command: String, stdin: String) -> String {
+  // ...
+}
 ```
 
 ```swift
 //✅✅✅
+/// Returns the output generated by executing a command.
+///
+/// - Parameter command: The command to execute in the shell environment.
+/// - Returns: A string containing the contents of the invoked process's
+///   standard output.
+func execute(command: String) -> String {
+  // ...
+}
+
+/// Returns the output generated by executing a command with the given string
+/// used as standard input.
+///
+/// - Parameters:
+///   - command: The command to execute in the shell environment.
+///   - stdin: The string to use as standard input.
+/// - Returns: A string containing the contents of the invoked process's
+///   standard output.
+func execute(command: String, stdin: String) -> String {
+  // ...
+}
 
 ```
 
 
 <a name="ch7.4"></a>
 ### [Apple’s Markup Format](#ch7TOC)
-```swift
-//⛔️⛔️⛔️
-
-```
-
-```swift
-//✅✅✅
-
-```
-
+- Use of [Apple’s markup format](https://developer.apple.com/library/content/documentation/Xcode/Reference/xcode_markup_formatting_ref/) is strongly encouraged to add rich formatting to documentation.
+- Some Examples:
+    - Paragraphs are separated using a single line that starts with /// and is otherwise blank.
+    - *Single asterisks* (*) and _single underscores_ (_) will italisize text
+    - **Double asterisks** (**) and __double underscores__ (__) will bold the text
+    - Names of symbols or inline code are surrounded in `backticks` (`).
+    - Multi-line code is denoted by placing three backticks ( `` `) on the lines before and after the code block.
 
 <a name="ch7.5"></a>
 ### [Where to Document](#ch7TOC)
-```swift
-//⛔️⛔️⛔️
+- At a minimum, **documentation comments are present for every open or public declaration, and every open or public member** of such a declaration
+- Exceptions:
+    - Individual cases of an enum often are not documented if their meaning is self-explanatory from their name. 
+        - Cases with associated values, however, should document what those values mean if it is not obvious.
+    - A documentation comment is not always present on a declaration that overrides a supertype declaration or implements a protocol requirement, or on a declaration that provides the default implementation of a protocol requirement in an extension.
+    - It is acceptable to document an overridden declaration to describe new behavior from the declaration that it overrides.
+    - A documentation comment is not always present on test classes and test methods. 
+        - However, they can be useful for functional test classes and for helper classes/methods shared by multiple tests.
+    - A documentation comment is not always present on an extension declaration (that is, the extension itself). You may add one if it help clarify the purpose of the extension, but avoid meaningless or misleading comments.
+        ```swift
+        //⛔️⛔️⛔️
+        /// Add `Equatable` conformance.
+        extension MyType: Equatable {
+          // ...
+        }
+        ```
 
-```
-
-```swift
-//✅✅✅
-
-```
+    - Example below's documentation that is not scalable because the extension or the conformance could be updated in the future. Client code could use `Comparable` for other purposes in the future
+        ```swift
+        //⛔️⛔️⛔️
+        /// Make `Candidate` comparable so that they can be sorted.
+        extension Candidate: Comparable {
+          // ...
+        }
+        ```
+    - Leave out comments that are repeated information that is obvious from the source and sugaring words like “a representation of”
 
 ------------------------------------------------------------------------------------------------------------------------
