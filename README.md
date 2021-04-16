@@ -218,7 +218,8 @@ Horizontal alignment is forbidden except when writing obviously tabular data whe
 struct DataPoint {
   var value: Int
   var primaryColor: UIColor
-}```
+}
+```
 
 ```swift
 ⛔️
